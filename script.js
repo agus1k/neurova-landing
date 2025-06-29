@@ -28,3 +28,40 @@ function setupFAQAccordion() {
   });
 }
 window.addEventListener('DOMContentLoaded', setupFAQAccordion);
+
+// Header Dinámico - Aparece cuando el usuario hace scroll
+function setupDynamicHeader() {
+    const header = document.getElementById('dynamicHeader');
+    const hero = document.querySelector('.hero');
+    
+    if (!header || !hero) return;
+    
+    let isHeaderVisible = false;
+    let lastScrollTop = 0;
+    
+    function handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const heroBottom = hero.offsetTop + hero.offsetHeight;
+        
+        // Mostrar header cuando el usuario sale del hero y hace scroll hacia abajo
+        if (scrollTop > heroBottom - 100 && scrollTop > lastScrollTop && !isHeaderVisible) {
+            header.classList.add('visible');
+            isHeaderVisible = true;
+        }
+        // Ocultar header cuando el usuario vuelve al hero
+        else if (scrollTop <= heroBottom - 100 && isHeaderVisible) {
+            header.classList.remove('visible');
+            isHeaderVisible = false;
+        }
+        
+        lastScrollTop = scrollTop;
+    }
+    
+    // Agregar event listener para scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Verificar estado inicial
+    handleScroll();
+}
+
+window.addEventListener('DOMContentLoaded', setupDynamicHeader);
